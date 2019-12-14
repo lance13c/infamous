@@ -844,11 +844,16 @@ class MarkdownRenderer {
                 // TODO, it may be possible to extend from other things besides
                 // a @class. We should provide a way to get any of those things
                 // by name, more generic than the docsMeta.classes map.
-                const link =
-                    path.relative(path.dirname(classMeta.file), path.dirname(docsMeta.classes.get(name).file)) +
-                    '/' +
-                    name +
-                    '.md'
+
+                const parent = docsMeta.classes.get(name)
+
+                if (!parent) return name
+
+                // TODO not all classes are not in the meta. Why?
+                if (name === 'ImperativeBase') debugger
+
+                // TODO handle the extension (f.e. ".ts") generically
+                const link = path.relative(path.dirname(classMeta.file), parent.file.replace(/\.ts$/, '.md'))
 
                 return `[${name}](${link})`
             })
